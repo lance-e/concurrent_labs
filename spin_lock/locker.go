@@ -17,5 +17,5 @@ func (sl *Spinlock) Lock() {
 }
 
 func (sl *Spinlock) Unlock() {
-	sl.value = 0
+	atomic.StoreInt32(&sl.value, 0)
 }
