@@ -1,22 +1,41 @@
 package semaphore
 
+import (
+	"sync"
+)
+
+//给cond关联
+var Mutex = sync.Mutex{}
+
 type Semaphore struct {
-	//you need to write here
+	value uint32
+	cond  *sync.Cond
 }
 
-func NewSemaphore(v int) *Semaphore {
+func NewSemaphore(v uint32) *Semaphore {
 	return &Semaphore{
-		//you need to write here
+		value: v,
+		cond:  sync.NewCond(&Mutex),
 	}
-
 }
 
 // sem_wait(consumer) : -1
 func (sem *Semaphore) P() {
-	panic("you need to write from here , and delete this line")
+	Mutex.Lock()
+
+	for sem.value == 0 {
+		sem.cond.Wait()
+	}
+
+	sem.value--
+	Mutex.Unlock()
 }
 
 // sem_post(producter) : +1
 func (sem *Semaphore) V() {
-	panic("you need to write from here , and delete this line")
+	Mutex.Lock()
+
+	sem.value++
+	sem.cond.Signal()
+	Mutex.Unlock()
 }
