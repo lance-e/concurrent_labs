@@ -1,3 +1,5 @@
+//这个好难，不会
+
 package semaphore
 
 type Semaphore struct {
