@@ -1,5 +1,3 @@
-//不用学长爆奶茶，因为不是100%自己写的
-
 package spinlock
 
 type Spinlock struct {
