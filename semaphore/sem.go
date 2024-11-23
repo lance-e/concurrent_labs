@@ -6,6 +6,7 @@ import (
 
 type Semaphore struct {
 	n int32 //you need to write here
+
 }
 
 func NewSemaphore(v int) *Semaphore {
@@ -18,11 +19,15 @@ func NewSemaphore(v int) *Semaphore {
 // sem_wait(consumer) : -1
 func (sem *Semaphore) P() {
 	atomic.AddInt32(&sem.n, 1)
-
 }
 
 // sem_post(producter) : +1
 func (sem *Semaphore) V() {
-	atomic.AddInt32(&sem.n, -1)
+	for {
+		if sem.n > 0 {
+			atomic.AddInt32(&sem.n, -1)
+			return
+		}
+	}
 
 }
