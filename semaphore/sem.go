@@ -1,22 +1,28 @@
 package semaphore
 
+import (
+	"sync/atomic"
+)
+
 type Semaphore struct {
-	//you need to write here
+	n int32 //you need to write here
 }
 
 func NewSemaphore(v int) *Semaphore {
 	return &Semaphore{
-		//you need to write here
+		int32(v), //you need to write here
 	}
 
 }
 
 // sem_wait(consumer) : -1
 func (sem *Semaphore) P() {
-	panic("you need to write from here , and delete this line")
+	atomic.AddInt32(&sem.n, 1)
+
 }
 
 // sem_post(producter) : +1
 func (sem *Semaphore) V() {
-	panic("you need to write from here , and delete this line")
+	atomic.AddInt32(&sem.n, -1)
+
 }
