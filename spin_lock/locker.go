@@ -1,18 +1,21 @@
 package spinlock
 
+import (
+	"sync/atomic"
+)
+
 type Spinlock struct {
-	value bool
+	value int32
 }
 
 func (sl *Spinlock) Lock() {
 	for {
-		if !sl.value {
-			sl.value = true
+		if atomic.CompareAndSwapInt32(&sl.value, 0, 1) {
 			return
 		}
 	}
 }
 
 func (sl *Spinlock) Unlock() {
-	sl.value = false
+	atomic.StoreInt32(&sl.value, 0)
 }
